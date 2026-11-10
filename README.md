@@ -1,57 +1,47 @@
-# Police shootings analysis
+# Fatal Police Shootings in the United States
 
-The original file is located at this [link](https://colab.research.google.com/github/pboric/Capstone1/blob/main/capstone_1.ipynb).
+An analysis of The Washington Post's database of fatal police shootings in the US since 2015: trends over time,
+who the victims are, where incidents happen, a statistical test of the trend and a simple forecast.
 
-## Author 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/pboric/us-police-shootings-analysis/blob/main/Police_Shootings_Analysis.ipynb)
 
-Petar Krešimir Borić
+## Key findings
 
-## 1. Data Cleaning and Preprocessing
+- **California, Texas and Florida** have the most incidents.
+- In absolute numbers most victims are white and most were armed with a gun; armed status differs between racial
+  groups.
+- The yearly totals rise, but a generalized additive model (GAM) of the monthly counts finds **no statistically
+  significant trend** (p ≈ 0.4 for both spline terms).
+- A Random Forest model forecasts about **1,150 fatal shootings for 2024**.
 
-### 1.1. Initial Data Inspection
+## What the notebook covers
 
-The necessary packages and libraries are installed. The dataset is loaded and an initial exploration is performed to understand the structure, types of data, and any immediately visible inconsistencies (missing values, incorrect data types, etc.).
+1. Data cleaning and feature engineering (duplicates, data types, missing values, date features)
+2. Descriptive statistics, temporal patterns by year and month
+3. Demographics: age, race, gender, mental illness, armed status
+4. Geography: incidents by state, with a map
+5. Hypothesis test of the trend with a GAM
+6. Forecast of the 2024 total with a Random Forest regressor
 
-### 1.2. Handling Missing Data
+## Run it
 
-The **date** column is of type object, which suggests it might need to be converted to datetime for time series analysis. There are missing values in several columns, notably in **county**, **latitude**, **longitude**, **location_precision**, **race**, and **race_source**. The **county**, **race_source**, **name**, **longitude**, **latitude**, **location_precision** features are removed, then missing **ages** are imputed using the **median age**, and the rest of the missing values are imputed with ''Unknown''.
+The data is downloaded directly from The Washington Post's GitHub repository, so nothing needs to be prepared:
 
-### 1.3. Feature Engineering
+```bash
+pip install -r requirements.txt
+jupyter notebook Police_Shootings_Analysis.ipynb
+```
 
-**Date-Time Features**: Year, month, day, and weekday are extracted from the 'date' column to analyze temporal trends.
+## Limitations
 
-**Location Features**: 'City' and 'state' are combined into a single location feature for simplicity.
+The counts are not adjusted for population size. Comparing racial groups or states fairly would need rates per
+person (for example per million residents), which can change the picture considerably.
 
-**Age Group**: 'Age' is categorized into groups (e.g., minor, adult) for demographic analysis.
+## Data
 
-## 2. Exploratory Data Analysis (EDA)
+[The Washington Post: Fatal Force database](https://github.com/washingtonpost/data-police-shootings) and US state
+boundaries from the US Census Bureau.
 
-### 2.1. Descriptive Statistics
+## License
 
-Basic statistical measures (mean, median, mode, quartiles, variance, standard deviation) for quantitative features like age are computed. For categorical data like race or gender, frequency counts are calculated.
-
-### 2.2. Temporal Analysis
-
-Trends over time (yearly, monthly) are analyzed to identify any patterns or spikes in incidents.
-
-### 2.3. Demographic Analysis
-
-The distribution of incidents by age, race, gender, and whether mental illness was related are explored.
-
-### 2.4. Geographical Analysis
-
-Incidents are analyzed by state or region to identify areas with higher occurrences.
-
-## 3. Hypothesis Testing and Inference
-
-Hypothesis based on the EDA and statistical tests to validate them are performed.
-
-### 3.1. Hypothesis: The number of police shootings has increased over the years.
-
-A Generalized Additive Model (GAM) with the independent variable as ‘Months Since Start’ and the dependent variable as ‘Number of Shootings’ is used for the statistical test.
-
-## 4. Predictive analysis
-
-### 4.1 Predict the number of police shootings for the year 2024 using Random Forest model
-
-The number of police shootings for the year 2024 is predicted using a Random Forest model.
+MIT
